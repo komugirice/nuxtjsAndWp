@@ -1,5 +1,17 @@
+import axios from 'axios'
+
+require('dotenv').config()
+
+const {
+  WORDPRESS_BASE_URL,
+  WORDPRESS_REST_API_ENDPOINT,
+} = process.env
 
 export default {
+  env: {
+    WORDPRESS_BASE_URL,
+    WORDPRESS_REST_API_ENDPOINT,
+  },
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
@@ -45,16 +57,41 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    // Doc: https://github.com/nuxt-community/eslint-module
+    '@nuxtjs/eslint-module'
   ],
   /*
   ** Nuxt.js modules
   */
   modules: [
+    // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios'
   ],
+  /*
+  ** Axios module configuration
+  ** See https://axios.nuxtjs.org/options
+  */
+  axios: {},
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
+
+  generate: {
+    interval: 1000,
+    routes () {
+      return Promise.all([
+        axios.get(`${WORDPRESS_REST_API_ENDPOINT}/posts?per_page=100&page=1&_embed=1`),
+      ]).then((data) => {
+        const posts = data[0]
+        return posts.data.map((post) => {
+          const link = post.link.replace(WORDPRESS_BASE_URL + '/', '')
+          return { route: `${link}`, payload: post }
+        })
+      })
+    }
+  },
+
   build: {
   }
 }

@@ -1,4 +1,4 @@
-# nuxtjsAndWp
+# wp-app
 
 ## Build Setup
 
