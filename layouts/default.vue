@@ -1,11 +1,36 @@
 <template>
-  <div>
-    <Nuxt />
+  <div id="container" class="container cf" data-barba="container" data-barba-namespace="home">
+    <TheHeader />
+    <TheNavigation />
+    <div id="content" class="content cf">
+      <div id="content-in" class="content-in wrap">
+        <main id="main" class="main" itemtype="https://schema.org/Blog">
+          <Nuxt />
+        </main>
+        <TheSidebar />
+      </div>
+    </div>
   </div>
 </template>
 
+<script>
+import TheHeader from '../components/TheHeader'
+import TheNavigation from '../components/TheNavigation'
+import TheSidebar from '../components/TheSidebar'
+
+export default {
+  components: {
+    TheHeader,
+    TheNavigation,
+    TheSidebar
+  }
+}
+</script>
 <style>
-html {
+@import '~/assets/css/normalize.css';
+@import '~/assets/css/style.css';
+@import '~/assets/css/common.css';
+/* html {
   font-family:
     'Source Sans Pro',
     -apple-system,
@@ -22,7 +47,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-}
+} */
 
 *,
 *::before,

@@ -93,5 +93,8 @@ export default {
   },
 
   build: {
+    extend (config, ctx) {
+      config.devtool = 'inline-cheap-module-source-map'
+    }
   }
 }

@@ -1,19 +1,21 @@
 <template>
   <div>
-    <ul class="list">
-      <li v-for="post in posts" :key="post.id">
-        <div class="post">
-          <a :href="post | postLink">
-            <div>
-              <h2>{{ post.title.rendered }}</h2>
-              <p class="modified-date">
-                最終更新日：{{ post.modified }}
-              </p>
-            </div>
-          </a>
-        </div>
-      </li>
-    </ul>
+    <div>
+      <ul class="list">
+        <li v-for="post in posts" :key="post.id">
+          <div class="post">
+            <a :href="post | postLink">
+              <div>
+                <h2>{{ post.title.rendered }}</h2>
+                <p class="modified-date">
+                  最終更新日：{{ post.modified }}
+                </p>
+              </div>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -52,4 +54,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+</style>
