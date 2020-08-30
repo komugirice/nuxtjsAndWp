@@ -1,0 +1,449 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/344/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>MVVMとDataBindingの流れについて</h1> <div class="content">
+<p>MVVMとは(Model)-(View)-(ViewModel)のアーキテクチャーパターンである</p>
+
+
+
+<br>
+
+
+
+<p>AndroidアプリはWebアプリと違ってクライアント：サーバ構成ではない。クライアントサイドにあたる端末に直接インストールされる。</p>
+
+
+
+<p>Activity, Fragmentという呼び方は、その理由からAndroid専用の概念として呼んでいるのではないだろうか</p>
+
+
+<p>そしてActivity, Fragmentは”View”の役割である「UIの表示・更新」を担う</p>
+<p>ViewModelが「UIを表示するための必要なデータ取得・更新処理」を担う</p>
+
+
+<p></p><div class="mb40 clearfix"></div>
+<p class="caption">QiitaApplicationでは下記の構成でMVVMを実装している</p><p></p>
+
+
+
+<p>Model：ArticleRow</p>
+
+
+
+<p>View：AriticleFragment, fragment_article.xml</p>
+
+
+
+<p>ViewModel：ArticleViewModel</p>
+
+
+
+<div class="mb40 clearfix"></div>
+
+
+
+<p class="caption">処理の流れはこのような形となる</p>
+
+
+
+<p></p>
+
+
+
+<p>・アプリを起動して<strong>AriticleFragment(View)</strong>を表示 →</p>
+
+
+
+<p>・<strong>AriticleFragment(View)</strong>のアクションで<strong>ArticleViewModel</strong>を呼び出す → </p>
+
+
+
+<p>・<strong>ArticleViewModel</strong>がAPI呼び出しで<strong>ArticleRow(Model)</strong>にデータを設定 → </p>
+
+
+
+<p>・LiveDataを使用して<strong>AriticleFragment(View)</strong>のArticleListView.refresh()を呼び出す → </p>
+
+
+
+<p>・ArticleListViewのonBindViewHolder()で<strong>ArticleRow(Model)</strong>を<strong>row.xml(View)に</strong>データバインディングを行う</p>
+
+
+
+<div class="mb40 clearfix"></div>
+
+
+
+<p>一つずつ見てみよう</p>
+<br>
+
+
+
+<p>・アプリを起動してAriticleFragment(View)を表示</p>
+<br>
+
+
+
+<p>・AriticleFragment(View)のアクションでArticleViewModelを呼び出す</p>
+
+
+
+<div class="indent">
+
+
+
+<p class="filename">AriticleFragment</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="3,11,19,24,29" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">class ArticleFragment : Fragment() {
+・・・
+    private lateinit var viewModel: ArticleViewModel
+・・・
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+・・・
+        // initViewModel
+        viewModel = ViewModelProviders.of(this).get(ArticleViewModel::class.java).apply {
+・・・
+        }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
+    }
+
+    private fun initialize() {
+        initLayout()
+        initData()
+    }
+
+    private fun initData() {
+        // QiitaAPI実行
+        viewModel.initData(false)
+    }
+
+</pre>
+
+
+
+</div><br>
+
+
+
+<p>・ArticleViewModelがAPI呼び出しでArticleRow(Model)にデータを設定</p>
+
+
+
+<div class="indent">
+
+
+
+<p class="filename">ArticleViewModel.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="24,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53" data-enlighter-linenumbers="" data-enlighter-lineoffset="23" data-enlighter-title="" data-enlighter-group="">    fun initData(isFavorite: Boolean) {
+        updateData(1, isFavorite)
+    }
+
+    fun initSearch(type: Int, query: String) {
+        search(type, 1, query)
+    }
+
+    /**
+     * updateData
+     *
+     * @param page 検索するページ番号
+     * @param isFavorite　お気に入りか
+     * @param isAdd true:追加 false:クリア
+     *
+     */
+    fun updateData(page: Int, isFavorite: Boolean, isAdd: Boolean = false) {
+        QiitaApi.itemsIF.getItem(page)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                var articleRowList : MutableList&lt;ArticleRow>  = mutableListOf()
+                it.forEach({
+                        resp ->
+                    val row =
+                        ArticleRow()
+                    row.convertFromQiitaResponse(resp)
+                    articleRowList.add(row)
+                })
+                // 取得データ反映
+                setItems(articleRowList, isFavorite, isAdd)
+
+            }, {
+                currentPage = page
+                isAddPrev = isAdd
+
+                //items.postValue(listOf())
+                isException.postValue(it)
+
+            })
+
+    }</pre>
+
+
+
+</div><br>
+
+
+
+<p>・LiveDataを使用してAriticleFragment(View)のArticleListViewに反映 </p>
+
+
+
+<div class="indent">
+
+
+
+<p class="filename">ArticleViewModel.kt</p>
+
+
+
+<p>LiveDataを定義</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="16" data-enlighter-title="" data-enlighter-group="">    val items = MutableLiveData&lt;List&lt;ArticleAdapter.QiitaData>>()</pre>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="74,85" data-enlighter-linenumbers="" data-enlighter-lineoffset="66" data-enlighter-title="" data-enlighter-group="">   /**
+     * setItems
+     *
+     * @param articleRowList
+     * @param isFavorite
+     * @param isAdd
+     *
+     */
+    fun setItems(articleRowList : MutableList&lt;ArticleRow>, isFavorite: Boolean, isAdd: Boolean = false) {
+
+        // 引数：articleRowList → ArticleAdapter.QiitaDataにコンバート
+        val qiitaList : MutableList&lt;ArticleAdapter.QiitaData> = mutableListOf()
+        articleRowList.forEach({ row -> qiitaList.add(ArticleAdapter.QiitaData(row, isFavorite))})
+
+        // 引数：isAddによってデータ追加orクリア
+        val tempList = mutableListOf&lt;ArticleAdapter.QiitaData>()
+        if (isAdd)
+            tempList.addAll(items.value ?: listOf())
+        tempList.addAll(qiitaList)
+        items.postValue(tempList)
+    }</pre>
+
+
+
+<p>LiveData.postValue()で値を更新するとLiveDataの監視処理が検知する</p>
+
+
+
+<br>
+<p class="filename">ArticleFragment.kt</p>
+
+
+
+<p>items.observe(this@ArticleFragment, Observer {〜})　がLiveDataの監視処理</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="59,62" data-enlighter-linenumbers="" data-enlighter-lineoffset="57" data-enlighter-title="" data-enlighter-group="">        viewModel = ViewModelProviders.of(this).get(ArticleViewModel::class.java).apply {
+            // QiitaApiが実行されて正常終了した
+            items.observe(this@ArticleFragment, Observer {
+                binding.apply {
+                    // items = it
+                    customAdapter.refresh(it)
+                    swipeRefreshLayout.isRefreshing = false
+                }
+            })
+            // QiitaAPIでExceptionが発生した
+            isException.observe(this@ArticleFragment, Observer {
+                when(it) {
+                    is UnknownHostException -> {
+                        showErrorDialog(
+                            R.string.title_network_error,
+                            R.string.message_network_error)
+                    }
+                    is HttpException -> {
+                        showErrorDialog(
+                            R.string.title_api_error,
+                            R.string.message_api_error)
+                    }
+                    else -> Log.e("QiitaAPI", "UnExpected Error")
+                }
+                binding.swipeRefreshLayout.isRefreshing = false
+            })
+        }</pre>
+
+
+
+</div><br>
+
+
+
+<p>・ArticleListViewのonBindViewHolder()でrow.xmlにArticleRow(Model)をデータバインディングを行う</p>
+
+
+
+<div class="indent">
+
+
+
+<p class="filename">ArticleAdapter.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="26" data-enlighter-title="" data-enlighter-group="">    private val items = mutableListOf&lt;QiitaData>()</pre>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="205" data-enlighter-linenumbers="" data-enlighter-lineoffset="200" data-enlighter-title="" data-enlighter-group="">    fun refresh(qiitaList: List&lt;QiitaData>) {
+        // リフレッシュ実行フラグON
+        hasCompletedFirstRefresh = true
+        items.apply {
+            clear()
+            addAll(qiitaList)
+        }
+
+        notifyDataSetChanged()
+    }</pre>
+
+
+
+<br>
+
+
+
+<p>DataBindingについて</p>
+
+
+
+<p>row.xmlを&lt;layout>〜&lt;/layout>で囲むと、RowBindingというクラスが生成される</p>
+
+
+
+<p>RowBindingでは、row.xmlに定義している&lt;data>〜&lt;/data>にアクセスできるようになる。</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="230" data-enlighter-title="" data-enlighter-group="">    class RowViewHolder(val binding: RowBinding): RecyclerView.ViewHolder(binding.root)</pre>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="130, 135, 148" data-enlighter-linenumbers="" data-enlighter-lineoffset="121" data-enlighter-title="" data-enlighter-group="">    private fun onBindViewHolder(holder: RowViewHolder, position: Int) {
+        val data = items[position]
+
+        // プロフィール画像
+        // タイトル
+        // いいね数
+        // コメント数
+        // 登録日（お気に入り画面で使用）
+        //holder.binding.bindProfileImage = Picasso.get().load(data.row.profileImageUrl).get() → utilに移行
+        holder.binding.articleRow = data.row
+
+        // ユーザ名 + " が" + 登録日 + " に投稿しました"
+        var userInfo = if(data.row.userName.isEmpty()) "Non-Name" else data.row.userName.trim()
+        userInfo += context?.getString( R.string.label_user_name ) + data.row.createdAt + context?.getString( R.string.label_created_at )
+        holder.binding.bindUserInfo = userInfo
+
+        // タググループ 5個まで
+        var tagList: MutableList&lt;Tag> = mutableListOf()
+        val tagStrList = data.row.tags.split(",").withIndex().map { if(it.index &lt;= 4) it.value else "" }.filterNot { it.isEmpty() }
+        tagStrList.forEach {
+            // 色：黒、テキストサイズ：10、背景画像：ic_label_gray_24dp
+            val tag: Tag = Tag(it)
+            tag.tagTextColor = Color.BLACK
+            tag.tagTextSize = 10.0f
+            tag.background = context?.getDrawable(R.drawable.ic_label_gray_24dp)
+            tagList.add(tag)
+        }
+        holder.binding.tagGroup.addTags(tagList)
+
+        // 登録日の表示切り替え
+        holder.binding.updDateLabel.toggle(data.isFavorite)
+        holder.binding.updDate.toggle(data.isFavorite)
+        //holder.rootView.setBackgroundColor(ContextCompat.getColor(context, if (position % 2 == 0) R.color.light_blue else R.color.light_yellow))
+    }</pre>
+
+
+
+<p class="filename">row.xml</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="generic" data-enlighter-theme="" data-enlighter-highlight="6,7,23,27,31,35,39,43" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;layout>
+
+    &lt;data>
+        &lt;variable
+            name="articleRow"
+            type="com.komugirice.qiitaapplication.dataclass.ArticleRow" />
+        &lt;variable
+            name="bindUserInfo"
+            type="String" />
+    &lt;/data>
+&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+・・・
+    &lt;ImageView
+        android:id="@+id/profileImage"
+        app:imageUrl="@{articleRow.profileImageUrl}"
+・・・
+        &lt;TextView
+            android:id="@+id/userInfo"
+            android:text="@{bindUserInfo}"
+・・・
+        &lt;TextView
+            android:id="@+id/articleTitle"
+            android:text="@{articleRow.title}"
+・・・
+        &lt;TextView
+            android:id="@+id/likesCount"
+            android:text="@{articleRow.likesCount}"
+・・・
+        &lt;TextView
+            android:id="@+id/commentCount"
+            android:text="@{articleRow.commentCount}"
+・・・
+        &lt;TextView
+            android:id="@+id/updDate"
+            android:text="@{articleRow.updDate}"
+・・・
+
+&lt;/androidx.constraintlayout.widget.ConstraintLayout>
+&lt;/layout>
+</pre>
+
+
+
+<p>app:imageUrl=”@{articleRow.profileImageUrl}”のように、</p>
+
+
+
+<p>&lt;data>〜&lt;/data>に定義した変数を、@{〜}で囲むことでViewのパラメータに直接代入できる。</p>
+
+
+
+</div>
+
+
+
+<p></p>
+</div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/344/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>

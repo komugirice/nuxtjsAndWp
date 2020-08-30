@@ -1,0 +1,96 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/157/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>EndlessScrollListener</h1> <div class="content">
+<p>QiitaAPIで記事データを取得し、RecyclerViewにエンドレスに表示する</p>
+
+
+<p>下記のサイトから拝借</p>
+<p><a rel="noopener noreferrer" href="https://www.it-swarm.dev/ja/android/recyclerviewで無限リストを実装する方法/1049150995/">https://www.it-swarm.dev/ja/android/recyclerviewで無限リストを実装する方法/1049150995/</a></p>
+
+
+<div class="mb20 clearfix"></div>
+<p class="filename">EndlessScrollListener</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="6" data-enlighter-title="" data-enlighter-group="">/**
+ * EndlessScrollListenerクラス
+ *
+ * @param mLinearLayoutManager
+ */
+abstract class EndlessScrollListener(private val mLinearLayoutManager: LinearLayoutManager) :
+    RecyclerView.OnScrollListener() {
+
+    internal var firstVisibleItem: Int = 0
+    internal var visibleItemCount: Int = 0
+    internal var totalItemCount: Int = 0
+    private var visibleThreshold = 10
+    private var previousTotal = 0
+    private var loading = true
+    private var current_page = 1
+    // スクロール条件件数を指定してください。取得件数を下回る場合はスクロールしません。
+    private val scrollOnItemCount: Int = 20
+
+
+    /**
+     * onScrolledメソッド
+     *
+     * @param recyclerView
+     * @param dx
+     * @param dy
+     *
+     */
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        visibleItemCount = recyclerView.childCount
+        // 取得件数
+        totalItemCount = mLinearLayoutManager.itemCount
+        firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition()
+
+        if (loading) {
+            if (totalItemCount > previousTotal) {
+                loading = false
+                previousTotal = totalItemCount
+            }
+        }
+
+        // 取得件数がスクロール条件件数を上回る場合だけ実行する
+        if (scrollOnItemCount &lt;= totalItemCount) {
+            if (!loading && totalItemCount - visibleItemCount &lt;= firstVisibleItem + visibleThreshold) {
+                current_page++
+
+                onLoadMore(current_page)
+
+                loading = true
+            }
+        }
+    }
+
+    /**
+     * onLoadMoreメソッド
+     *
+     * @param current_page
+     *
+     */
+    abstract fun onLoadMore(current_page: Int)
+
+    /**
+     * resetメソッド
+     *
+     */
+    fun reset() {
+        current_page = 1
+        previousTotal = 0
+        totalItemCount = 0
+        loading = true
+    }
+
+}</pre>
+</div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/157/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/150/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>RecyclerViewについて</h1> <div class="content">
+<p>layoutフォルダにQiita記事レイアウト用のViewを作成し、RecyclerViewがそれをリスト表示する</p>
+
+
+
+<p class="filename">fragment_article.xml</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="xml" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/articleListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/headerView" /></pre>
+
+
+
+<p class="filename">ArticleFragment</p>
+
+
+
+<p>RecyclerViewの内部処理はadapterが行う。ここではArticleAdapterという専用のAdapterを作成している</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="35" data-enlighter-title="" data-enlighter-group="">    private val customAdapter by lazy {
+        ArticleAdapter(
+            context,
+            false
+        )
+    }</pre>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="136" data-enlighter-linenumbers="" data-enlighter-lineoffset="128" data-enlighter-title="" data-enlighter-group="">    private fun initRecyclerView() {
+        // RecyclerViewを取得。
+        articleListView.apply {
+            // LinearLayoutManagerオブジェクトを生成。
+            val layout = LinearLayoutManager(context)
+            // RecyclerViewにレイアウトマネージャとしてLinearLayoutManagerを設定。
+            layoutManager = layout
+            // RecyclerViewにアダプタオブジェクトを設定。
+            adapter = customAdapter
+            // コンテンツの大きさが変わらないとき、trueを設定するとパフォーマンスが向上する
+            setHasFixedSize(true)
+
+            // EndlessScrollListenerのインスタンス化
+            mEndlessScrollListener = object:
+                EndlessScrollListener(articleListView.layoutManager as LinearLayoutManager) {
+                override fun onLoadMore(current_page: Int) {
+                    swipeRefreshLayout.isRefreshing = true
+                    // API実行
+                    viewModel.updateData(current_page, false, true)
+                }
+            }
+            // RecyclerViewスクロール対応
+            articleListView.addOnScrollListener(mEndlessScrollListener)
+        }
+    }</pre>
+
+
+
+<p>※本来、binding.articleListViewとするべきだが、手違いでDataBindingを使用しないarticleListViewで行っている。特に不具合はないのでこのままにしている</p>
+
+
+
+<div class="mb20 clearfix"></div>
+<p class="filename">ArticleAdapter</p>
+
+
+
+<p>ArticleAdapterに実装している一般的なメソッドとクラスを記載する</p>
+
+
+
+<p>内部処理の詳細は別の記事にて</p>
+
+
+
+<div class="mb20 clearfix"></div>
+
+
+<p><strong>クラス変数</strong><br>private val items = mutableListOf&lt;QiitaData>()<br>private var hasCompletedFirstRefresh = false</p>
+<p><strong>メソッド</strong><br>override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder<br>override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int)<br>private fun onBindViewHolder(holder: RowViewHolder, position: Int) <br>private fun onBindEmptyViewHolder(holder: EmptyViewHolder, position: Int) <br>override fun getItemCount(): Int<br>override fun getItemViewType(position: Int): Int<br>fun refresh(qiitaList: List&lt;QiitaData>)<br>fun clear()</p>
+<p><strong>インナークラス</strong><br>class RowViewHolder(val binding: RowBinding): RecyclerView.ViewHolder(binding.root)<br>class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)<br>class QiitaData</p></div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/150/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>

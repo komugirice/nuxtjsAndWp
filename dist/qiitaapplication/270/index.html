@@ -1,0 +1,193 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/270/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>Realmを使用したお気に入り記事の保存</h1> <div class="content">
+<p>お気に入り記事を登録する仕組みとして、モバイル向けDBのRealmを使用した。アプリ内の領域にデータを保存する。</p>
+
+
+
+<p>現在のモバイル向けDBは、Android JetpackによるとRoomが主流らしい</p>
+
+
+
+
+<a rel="noopener noreferrer" href="https://developer.android.com/jetpack?hl=ja" title="Android デベロッパー  |  Android Developers" class="blogcard-wrap external-blogcard-wrap a-wrap cf" target="_blank"><div class="blogcard external-blogcard eb-left cf"><div class="blogcard-label external-blogcard-label"><span class="fa"></span></div><figure class="blogcard-thumbnail external-blogcard-thumbnail"><img src="https://www.komugirice.com/wp-content/uploads/cocoon-resources/blog-card-cache/f37b2fee3109ff5f289228d7559d087b.png" alt="" class="blogcard-thumb-image external-blogcard-thumb-image" width="320" height="180"></figure><div class="blogcard-content external-blogcard-content"><div class="blogcard-title external-blogcard-title">Android デベロッパー  |  Android Developers</div><div class="blogcard-snippet external-blogcard-snippet"></div></div><div class="blogcard-footer external-blogcard-footer cf"><div class="blogcard-site external-blogcard-site"><div class="blogcard-favicon external-blogcard-favicon"><img src="//www.google.com/s2/favicons?domain=developer.android.com" class="blogcard-favicon-image" alt="" width="16" height="16"></div><div class="blogcard-domain external-blogcard-domain">developer.android.com</div></div></div></div></a>
+
+
+
+
+<p class="caption">取得処理</p>
+
+
+
+<p class="filename">FavoriteFragment.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">class FavoriteFragment : Fragment() {
+・・・
+    /** Realmインスタンス */
+    lateinit var mRealm: Realm
+・・・
+    private fun initialize() {
+        Realm.init(context)
+        mRealm = Realm.getDefaultInstance()
+
+
+    }
+・・・
+    fun readAll(): List&lt;ArticleRow>? {
+        val results = mRealm.where(ArticleRow::class.java).equalTo("delFlg", "0")
+            .sort("updDate", Sort.DESCENDING)
+        .findAll().let { mRealm.copyFromRealm(it)}
+        return  results
+    }
+・・・
+}</pre>
+
+
+<div class="mb20 clearfix"></div>
+
+
+<p class="filename">ArticleRow.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">open class ArticleRow (
+    @PrimaryKey open var id : String = "",
+    @Required open var url : String = "",
+    @Required open var title : String = "",
+    var profileImageUrl : String = "",
+・・・
+) : RealmObject() {
+・・・
+    companion object {
+        fun findAll(): List&lt;ArticleRow> =
+            Realm.getDefaultInstance().use { realm ->
+                realm.where(ArticleRow::class.java)
+                    .findAll()
+                    .let { realm.copyFromRealm(it) }
+            }
+
+        fun showAll() {
+            findAll()
+                .forEach {
+                Log.d("Favorite", "$it")
+            }
+        }
+    }
+・・・
+}</pre>
+
+
+<div class="mb20 clearfix"></div>
+
+
+<p class="filename">WebViewActivity.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">class WebViewActivity : AppCompatActivity() {
+・・・
+    /** Realmインスタンス */
+    lateinit var mRealm: Realm
+    /** 記事URL */
+    private val mUrl by lazy { intent.getStringExtra(KEY_URL) }
+    /** 記事タイトル */
+    private val mTitle by lazy { intent.getStringExtra(KEY_TITLE) }
+    /** 記事ID */
+    private val mQiitaResponseID by lazy { intent.getStringExtra(KEY_ID) }
+    /** お気に入りクラス */
+    lateinit var favorite: ArticleRow
+・・・
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_web_view)
+
+        initialize()
+
+    }
+・・・
+    private fun initialize() {
+        Realm.init(this)
+        mRealm = Realm.getDefaultInstance()
+        initData()
+        initLayout()
+    }
+・・・
+    private fun initData() {
+        // realmからselect
+        favorite = read(mQiitaResponseID) ?: ArticleRow()
+    }
+・・・
+    private fun initClick() {
+        // お気に入りアイコン
+        icFavorite.setOnClickListener {
+            // お気に入り未登録or1度登録したけど削除の場合
+            if (favorite.id.isEmpty() || favorite.delFlg == "1") {
+                //realmにinsertOrUpdate
+                insertOrUpdate("0")
+                // 画像の変更
+                icFavorite.setImageResource(R.drawable.ic_favorite_red_24dp)
+            } else {
+                // 削除
+                // realmにUpdate
+                insertOrUpdate("1")
+                // 画像の変更
+                icFavorite.setImageResource(R.drawable.ic_favorite_border_red_24dp)
+            }
+        }
+・・・
+    }
+・・・
+    override fun onDestroy() {
+        super.onDestroy()
+        mRealm.close()
+    }
+・・・
+   /**
+     * insertOrUpdateメソッド
+     *
+     * @param id: String
+     * @param url: String
+     * @param title: String
+     * @param delFlg: String
+     *
+     */
+    fun insertOrUpdate(delFlg: String) {
+        mRealm.executeTransaction { realm ->
+            realm.insertOrUpdate(
+                favorite.apply {
+                    if (id.isEmpty())
+                        id = mQiitaResponseID
+                    url = if (url.isEmpty()) mUrl else url
+                    title = if (title.isEmpty()) mTitle else title
+                    profileImageUrl = intent.getStringExtra(KEY_PROFILE_IMAGE_URL)
+                    userName = intent.getStringExtra(KEY_USER_NAME)
+                    createdAt = intent.getStringExtra(KEY_CREATED_AT)
+                    likesCount = intent.getStringExtra(KEY_LIKES_COUNT)
+                    commentCount = intent.getStringExtra(KEY_COMMENT_COUNT)
+                    tags = intent.getStringExtra(KEY_TAGS)
+                    updDate = Date().getDateToString()
+                    this.delFlg = delFlg
+
+                }
+            )
+        }
+    }
+
+    /**
+     * readメソッド
+     *
+     * @param id: String
+     */
+    fun read(id: String): ArticleRow? {
+        return mRealm.where(ArticleRow::class.java).equalTo("id", id).equalTo("delFlg", "0")
+            .findFirst()
+    }</pre>
+</div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/270/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>

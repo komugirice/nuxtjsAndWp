@@ -1,0 +1,68 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/327/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>9-Patchによるタグの表示</h1> <div class="content">
+<figure class="wp-block-gallery columns-1 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><img loading="lazy" width="321" height="479" src="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png" alt="" data-id="349" data-full-url="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png" data-link="https://www.komugirice.com/qiitaapplicaton-mainactivity-min/" class="wp-image-349" srcset="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png 321w, https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1-300x448.png 300w" sizes="(max-width: 321px) 100vw, 321px"></figure></li></ul></figure>
+
+
+
+<div class="mb20 clearfix"></div>
+
+
+
+<p>記事に表示するタグ画像は、タグの文字数によってサイズが変動する。</p>
+
+
+
+<p>そのような場合は9-Patchを使用する。</p>
+
+
+
+
+<a rel="noopener noreferrer" href="https://developer.android.com/studio/write/draw9patch?hl=ja" title="サイズ変更が可能なビットマップ（9-patch ファイル）の作成  |  Android デベロッパー  |  Android Developers" class="blogcard-wrap external-blogcard-wrap a-wrap cf" target="_blank"><div class="blogcard external-blogcard eb-left cf"><div class="blogcard-label external-blogcard-label"><span class="fa"></span></div><figure class="blogcard-thumbnail external-blogcard-thumbnail"><img src="https://www.komugirice.com/wp-content/uploads/cocoon-resources/blog-card-cache/f37b2fee3109ff5f289228d7559d087b.png" alt="" class="blogcard-thumb-image external-blogcard-thumb-image" width="320" height="180"></figure><div class="blogcard-content external-blogcard-content"><div class="blogcard-title external-blogcard-title">サイズ変更が可能なビットマップ（9-patch ファイル）の作成  |  Android デベロッパー  |  Android Developers</div><div class="blogcard-snippet external-blogcard-snippet">Draw 9-patch ツールは Android Studio に組み込まれている WYSIWYG エディタです。このツールを使用すると、ビューのコンテンツと画面のサイズに合わせて自動的にサイズが変更されるビットマップ画像を作成できます。</div></div><div class="blogcard-footer external-blogcard-footer cf"><div class="blogcard-site external-blogcard-site"><div class="blogcard-favicon external-blogcard-favicon"><img src="//www.google.com/s2/favicons?domain=developer.android.com" class="blogcard-favicon-image" alt="" width="16" height="16"></div><div class="blogcard-domain external-blogcard-domain">developer.android.com</div></div></div></div></a>
+
+
+
+
+<p class="filename">res/drawable/ic_label_gray_24dp.9.png</p>
+
+
+
+<figure class="wp-block-gallery columns-1 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><img loading="lazy" width="672" height="398" src="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-9patch-min-1.png" alt="" data-id="352" data-full-url="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-9patch-min-1.png" data-link="http://wordpressmyblog-env.eba-pyivcx8v.ap-northeast-1.elasticbeanstalk.com/qiitaapplicaton-9patch-min/" class="wp-image-352" srcset="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-9patch-min-1.png 672w, https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-9patch-min-1-500x296.png 500w, https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-9patch-min-1-300x178.png 300w" sizes="(max-width: 672px) 100vw, 672px"></figure></li></ul></figure>
+
+
+<div class="mb60"></div>
+<h4>実装部分</h4>
+
+
+<p class="filename">ArticleAdapter.kt</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="kotlin" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="137" data-enlighter-title="" data-enlighter-group="">        // タググループ 5個まで
+        var tagList: MutableList&lt;Tag> = mutableListOf()
+        val tagStrList = data.row.tags.split(",").withIndex().map { if(it.index &lt;= 4) it.value else "" }.filterNot { it.isEmpty() }
+        tagStrList.forEach {
+            // 色：黒、テキストサイズ：10、背景画像：ic_label_gray_24dp
+            val tag: Tag = Tag(it)
+            tag.tagTextColor = Color.BLACK
+            tag.tagTextSize = 10.0f
+            tag.background = context?.getDrawable(R.drawable.ic_label_gray_24dp)
+            tagList.add(tag)
+        }
+        holder.binding.tagGroup.addTags(tagList)</pre>
+
+
+
+<div class="mb60"></div>
+<p>文字が表示しないタグが表示されるバグの原因は不明</p>
+
+
+
+<figure class="wp-block-gallery columns-1 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><img loading="lazy" width="323" height="207" src="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-cell-min-1.png" alt="" data-id="350" data-full-url="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-cell-min-1.png" data-link="http://wordpressmyblog-env.eba-pyivcx8v.ap-northeast-1.elasticbeanstalk.com/qiitaapplicaton-cell-min/" class="wp-image-350" srcset="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-cell-min-1.png 323w, https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-cell-min-1-300x192.png 300w" sizes="(max-width: 323px) 100vw, 323px"></figure></li></ul></figure>
+</div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/327/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>

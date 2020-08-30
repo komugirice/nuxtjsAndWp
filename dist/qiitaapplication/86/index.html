@@ -1,0 +1,153 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>wp-app</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="## Build Setup"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/runtime.8b17cd4.js" as="script"><link rel="preload" href="/_nuxt/vendors/commons.ca01d4b.js" as="script"><link rel="preload" href="/_nuxt/app.1984cc1.js" as="script"><link rel="preload" href="/_nuxt/pages/_slug/_id.b892f06.js" as="script"><style data-vue-ssr-id="fa7ff0ca:0 56b15182:0">.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}</style><link rel="preload" href="/_nuxt/static/1598415284/qiitaapplication/86/payload.js" as="script">
+  </head>
+  <body>
+    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div><div class="post"><h1>QiitaApplicationの概要</h1> <div class="content"><p><strong>QiitaAPIを使用したデータ取得、一覧表示するアプリを作成した。</strong></p>
+<p class="mb-10">APIで記事を取得して一覧表示する画面と、お気に入りを一覧表示する画面で構成している。</p>
+
+
+<figure class="wp-block-gallery columns-1 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><img loading="lazy" width="321" height="479" src="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png" alt="" data-id="349" data-full-url="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png" data-link="https://www.komugirice.com/qiitaapplicaton-mainactivity-min/" class="wp-image-349" srcset="https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1.png 321w, https://komugirice-myblog.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/08/qiitaApplicaton-mainactivity-min-e1597045980951-1-300x448.png 300w" sizes="(max-width: 321px) 100vw, 321px"></figure></li></ul></figure>
+
+
+
+<div class="wp-block-group"><div class="wp-block-group__inner-container">
+<h4>構成は次の通り</h4>
+</div></div>
+
+
+<div>
+<p>ヘッダー<br>　タイトル<br>　サーチアイコン</p>
+<p>tabLayout<br>　記事一覧、お気に入り</p>
+<p>viewPager<br>　ArticleFragment、FavoriteFragment</p>
+</div>
+
+
+<div aria-hidden="true" class="mb60 wp-block-spacer clearfix"></div>
+
+
+
+<p><b>メイン画面はactivity_main.xml, MainActivity.ktで実装している</b></p>
+
+
+
+<p class="filename">activity_main.xml</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="xml" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="layout/activity_main.xml" data-enlighter-group="">&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;layout>
+&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+
+    &lt;androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerView"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorQiita"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        &lt;TextView
+            android:id="@+id/headerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/title_toolbar"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        &lt;ImageView
+            android:id="@+id/searchImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_search_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        &lt;androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerSearchView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            &lt;ImageView
+                android:id="@+id/deleteImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_close_black_24dp"
+                android:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            &lt;EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/ic_search_white_24dp"
+                android:drawableTint="#33000000"
+                android:gravity="start|center"
+                android:hint="@string/label_search_title"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="@android:color/white"
+                android:textColorHint="#33000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/deleteImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        &lt;/androidx.constraintlayout.widget.ConstraintLayout>
+
+    &lt;/androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    &lt;com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerView"
+        app:tabTextColor="@android:color/white"
+        app:tabBackground="@color/colorQiita" />
+
+
+    &lt;androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+&lt;/androidx.constraintlayout.widget.ConstraintLayout>
+&lt;/layout></pre>
+
+
+
+<p>ヘッダーはtoolbarを使用せず、自作している。</p>
+</div></div></div></div></div></div><script>window.__NUXT__={staticAssetsBase:"/_nuxt/static/1598415284",layout:"default",error:null,serverRendered:!0,routePath:"/qiitaapplication/86/",config:{}}</script><script src="/_nuxt/runtime.8b17cd4.js" defer></script><script src="/_nuxt/pages/_slug/_id.b892f06.js" defer></script><script src="/_nuxt/vendors/commons.ca01d4b.js" defer></script><script src="/_nuxt/app.1984cc1.js" defer></script>
+  </body>
+</html>
