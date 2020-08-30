@@ -1,18 +1,20 @@
 <template>
   <div>
-    <div>
+    <div class="list ect-entry-card ecb-entry-border front-page-type-category">
       <ul class="list">
         <li v-for="post in posts" :key="post.id">
-          <div class="post">
-            <a :href="post | postLink">
-              <div>
-                <h2>{{ post.title.rendered }}</h2>
-                <p class="modified-date">
-                  最終更新日：{{ post.modified }}
-                </p>
-              </div>
-            </a>
-          </div>
+          <a :href="post | postLink" class="entry-card-wrap a-wrap border-element cf" :title="post.title.rendered">
+            <article class="entry-card e-card cf post type-post status-publish format-standard hentry">
+
+              <div class="entry-card-content card-content e-card-content">
+                <h2 class="entry-card-title card-title e-card-title" itemprop="headline">{{post.title.rendered}}</h2>
+                            <div class="entry-card-meta card-meta e-card-meta">
+                  <div class="entry-card-info e-card-info"></div>
+                  <div class="entry-card-categorys"><span class="modified-date">{{post.modified}}</span></div>
+                </div>
+              </div><!-- /.entry-card-content -->
+            </article>
+          </a>
         </li>
       </ul>
     </div>
@@ -53,6 +55,8 @@ export default {
   }
 }
 </script>
-
 <style>
+.entry-card-content {
+  margin-left: 0;
+}
 </style>
