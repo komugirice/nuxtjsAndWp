@@ -6,3 +6,12 @@ Vue.filter('formatDate', (date) => {
   moment.locale('ja')
   return moment(date).format('LLL')
 })
+
+Vue.filter('postLink', (post) => {
+  const linkName = post.link.replace(
+    process.env.WORDPRESS_BASE_URL + '/',
+    ''
+  )
+  const link = `${linkName}`
+  return encodeURI(link)
+})

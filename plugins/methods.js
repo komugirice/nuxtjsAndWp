@@ -51,3 +51,12 @@ Vue.prototype.$fetchPostsByCategories = async (params) => {
   // console.log(postsByCategories)
   return postsByCategories
 }
+
+Vue.prototype.$fetchTags = async (params) => {
+  const tagResponse = await axios.get(
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/tags'
+  )
+  const tags = tagResponse.data
+
+  return tags
+}

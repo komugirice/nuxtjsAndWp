@@ -11,9 +11,9 @@
 
               <div class="entry-card-content card-content e-card-content">
                 <h2 class="entry-card-title card-title e-card-title" itemprop="headline">{{post.title.rendered}}</h2>
-                            <div class="entry-card-meta card-meta e-card-meta">
+                <div class="entry-card-meta card-meta e-card-meta">
                   <div class="entry-card-info e-card-info"></div>
-                  <div class="entry-card-categorys"><span class="modified-date">{{post.modified | formatDate}}</span></div>
+                    <div class="entry-card-categorys"><span class="modified-date">{{post.modified | formatDate}}</span></div>
                 </div>
               </div><!-- /.entry-card-content -->
             </article>
@@ -26,16 +26,6 @@
 
 <script>
 export default {
-  filters: {
-    postLink (post) {
-      const linkName = post.link.replace(
-        process.env.WORDPRESS_BASE_URL + '/',
-        ''
-      )
-      const link = `${linkName}`
-      return encodeURI(link)
-    }
-  },
   data () {
     return {
       posts: [],
