@@ -13,7 +13,7 @@
                 <h2 class="entry-card-title card-title e-card-title" itemprop="headline">{{post.title.rendered}}</h2>
                             <div class="entry-card-meta card-meta e-card-meta">
                   <div class="entry-card-info e-card-info"></div>
-                  <div class="entry-card-categorys"><span class="modified-date">{{post.modified}}</span></div>
+                  <div class="entry-card-categorys"><span class="modified-date">{{post.modified | formatDate}}</span></div>
                 </div>
               </div><!-- /.entry-card-content -->
             </article>
@@ -50,51 +50,13 @@ export default {
   },
   methods: {
     async fetchData (params) {
-      const categoryResponse = await this.$axios.get(
-        process.env.WORDPRESS_REST_API_ENDPOINT + '/categories'
-      )
-      const categories = categoryResponse.data
       const response = await this.$axios.get(
         process.env.WORDPRESS_REST_API_ENDPOINT + '/posts',
         { params }
       )
       this.posts = response.data
 
-      this.postsByCategories = []
-
-      for (let i = 0; i < this.posts.length; i++) {
-        const post = this.posts[i]
-        // console.log('i=' + i)
-        for (let n = 0; n < post.categories.length; n++) {
-          const catId = post.categories[n]
-          // console.log('n=' + n)
-          for (let x = 0; x < categories.length; x++) {
-            const cat = categories[x]
-            // console.log('x=' + x)
-            if (catId === cat.id) {
-              let flag = false
-              for (let y = 0; y < this.postsByCategories.length; y++) {
-                // console.log('y=' + y)
-                // console.log(this.postsByCategories[y])
-
-                if (this.postsByCategories[y].id === catId) {
-                  flag = true
-                  this.postsByCategories[y].posts.push(post)
-                }
-              }
-              if (!flag) {
-                this.postsByCategories.push(
-                  {
-                    id: cat.id,
-                    name: cat.name,
-                    posts: [post]
-                  }
-                )
-              }
-            }
-          }
-        }
-      }
+      this.postsByCategories = await this.$fetchPostsByCategories({})
 
       // this.postsByCategories = [
       //   { id: 'ID' , name: 'カテゴリ名', posts: [
@@ -139,5 +101,9 @@ ul.list {
     width: 55px;
     height: 1px;
     background-color: black;
+}
+.modified-date {
+  font-size: 0.7em;
+  padding: 2px;
 }
 </style>

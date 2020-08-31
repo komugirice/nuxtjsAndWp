@@ -35,7 +35,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
+    bodyAttrs: {
+      class: 'fz-18px fw-400'
+    }
   },
   /*
   ** Global CSS
@@ -47,6 +50,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '~plugins/filters.js',
+    '~plugins/methods.js'
   ],
   /*
   ** Auto import components
