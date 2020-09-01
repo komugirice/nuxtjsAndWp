@@ -3,7 +3,7 @@
     <div id="navi-in" class="navi-in wrap cf">
       <ul id="menu-navigation" class="menu-top menu-header menu-pc">
         <li v-for="category in categories" :key="category.name" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-no-description">
-          <a :href="'category/' + category.slug">
+          <a :href="'/category/' + category.slug">
             <div class="caption-wrap"><div class="item-label">{{ category.name }}</div></div>
           </a>
         </li>

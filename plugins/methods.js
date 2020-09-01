@@ -2,16 +2,17 @@ import Vue from 'vue'
 import axios from 'axios'
 
 Vue.prototype.$fetchPostsByCategories = async (params, params2) => {
-  const categoryResponse = await axios.get(
-    process.env.WORDPRESS_REST_API_ENDPOINT + '/categories',
-    params
-  )
-  const categories = categoryResponse.data
   const response = await axios.get(
-    process.env.WORDPRESS_REST_API_ENDPOINT + '/posts',
-    params2
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/posts', params
   )
   const posts = response.data
+
+  console.log('params2=' + params2)
+  const categoryResponse = await axios.get(
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/categories', params2
+  )
+  const categories = categoryResponse.data
+  console.log(categories)
 
   const postsByCategories = []
 
@@ -55,9 +56,54 @@ Vue.prototype.$fetchPostsByCategories = async (params, params2) => {
 
 Vue.prototype.$fetchTags = async (params) => {
   const tagResponse = await axios.get(
-    process.env.WORDPRESS_REST_API_ENDPOINT + '/tags'
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/tags',
+    params
   )
   const tags = tagResponse.data
 
   return tags
+}
+
+Vue.prototype.$fetchPostsByTag = async (params, params2) => {
+  const response = await axios.get(
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/posts',
+    params
+  )
+  const posts = response.data
+
+  const tagResponse = await axios.get(
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/tags',
+    params2
+  )
+  const tags = tagResponse.data
+
+  const postsByTag = {}
+
+  for (let i = 0; i < posts.length; i++) {
+    const post = posts[i]
+    for (let n = 0; n < post.tags.length; n++) {
+      const tagId = post.tags[n]
+      for (let y = 0; y < tags.length; y++) {
+        const tag = tags[y]
+        // console.log('y=' + y)
+
+        if (tagId === tag.id) {
+          console.log('postsByTag.posts=' + postsByTag.posts)
+          if (postsByTag.posts === undefined) {
+            postsByTag.push(
+              {
+                id: tag.id,
+                name: tag.name,
+                posts: [post]
+              }
+            )
+          } else {
+            postsByTag.posts.push(post)
+          }
+        }
+      }
+    }
+  }
+  // console.log(postsByCategories)
+  return postsByTag
 }

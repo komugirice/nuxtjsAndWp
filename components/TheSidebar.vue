@@ -28,6 +28,16 @@
 </template>
 <script>
 export default {
+  filters: {
+    postLink (post) {
+      const linkName = post.link.replace(
+        process.env.WORDPRESS_BASE_URL,
+        ''
+      )
+      const link = `${linkName}`
+      return encodeURI(link)
+    }
+  },
   data () {
     return {
       postsByCategories: [],
