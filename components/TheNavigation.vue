@@ -7,8 +7,6 @@
             <div class="caption-wrap"><div class="item-label">{{ category.name }}</div></div>
           </a>
         </li>
-        <!-- <li id="menu-item-382" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-no-description"><a href="https://www.komugirice.com/category/qiitaapplication/" style=""><div class="caption-wrap"><div class="item-label" style="">QiitaApplicaton</div></div></a></li>
-                <li id="menu-item-381" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-no-description"><a href="https://www.komugirice.com/category/general/" style=""><div class="caption-wrap"><div class="item-label" style="">一般</div></div></a></li> -->
       </ul>
     </div><!-- /#navi-in -->
   </nav>
@@ -32,10 +30,12 @@ export default {
     }
   },
   created () {
-    this.asyncData({})
+    this.asyncData({
+      hide_empty: true
+    })
   },
   methods: {
-    async asyncData ({ params }) {
+    async asyncData (params) {
       const response = await this.$axios.get(
             `${process.env.WORDPRESS_REST_API_ENDPOINT}/categories`
             , { params }

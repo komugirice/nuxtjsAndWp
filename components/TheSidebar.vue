@@ -4,7 +4,7 @@
       <h3 class="widget-sidebar-title widget-title">カテゴリー</h3>
       <ul>
         <li v-for="category in postsByCategories" :key="category.id" class="cat-item">
-          <a :href="category.link" class="cf">{{category.name}}
+          <a :href="category | postLink" class="cf">{{category.name}}
             <span class="post-count">{{category.posts.length}}</span>
           </a>
         </li>
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     async fetchData (params) {
-      this.postsByCategories = await this.$fetchPostsByCategories({})
+      this.postsByCategories = await this.$fetchPostsByCategories({}, {})
 
       this.tags = await this.$fetchTags({})
     }

@@ -28,25 +28,17 @@
 export default {
   data () {
     return {
-      posts: [],
       postsByCategories: []
     }
   },
   created () {
     this.fetchData({
-      page: 1,
-      per_page: 50
+      slug: this.$route.params.slug
     })
   },
   methods: {
     async fetchData (params) {
-      const response = await this.$axios.get(
-        process.env.WORDPRESS_REST_API_ENDPOINT + '/posts',
-        { params }
-      )
-      this.posts = response.data
-
-      this.postsByCategories = await this.$fetchPostsByCategories({}, {})
+      this.postsByCategories = await this.$fetchPostsByCategories({}, params)
 
       // this.postsByCategories = [
       //   { id: 'ID' , name: 'カテゴリ名', posts: [

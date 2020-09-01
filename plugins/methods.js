@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-Vue.prototype.$fetchPostsByCategories = async (params) => {
+Vue.prototype.$fetchPostsByCategories = async (params, params2) => {
   const categoryResponse = await axios.get(
-    process.env.WORDPRESS_REST_API_ENDPOINT + '/categories'
+    process.env.WORDPRESS_REST_API_ENDPOINT + '/categories',
+    params
   )
   const categories = categoryResponse.data
   const response = await axios.get(
     process.env.WORDPRESS_REST_API_ENDPOINT + '/posts',
-    { params }
+    params2
   )
   const posts = response.data
 

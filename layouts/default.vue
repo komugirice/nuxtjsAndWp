@@ -10,6 +10,7 @@
         <TheSidebar />
       </div>
     </div>
+    <TheFooter />
   </div>
 </template>
 
@@ -17,12 +18,14 @@
 import TheHeader from '../components/TheHeader'
 import TheNavigation from '../components/TheNavigation'
 import TheSidebar from '../components/TheSidebar'
+import TheFooter from '../components/TheFooter'
 
 export default {
   components: {
     TheHeader,
     TheNavigation,
-    TheSidebar
+    TheSidebar,
+    TheFooter
   }
 }
 </script>
