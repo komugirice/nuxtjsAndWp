@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async fetchData (params) {
-      console.log(params)
+      // console.log(params)
       this.postsByCategories = await this.$fetchPostsByCategories({}, params)
 
       // this.postsByCategories = [

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="list ect-entry-card ecb-entry-border front-page-type-tag">
-      <ul v-for="tag in postsByTags" :key="tag.id" class="list">
+      <ul v-for="tag in postsByTag" :key="tag.id" class="list">
         <h1 class="list-title">
           <span class="list-title-in">{{tag.name}}</span>
         </h1>
@@ -39,6 +39,7 @@ export default {
   methods: {
     async fetchData (params) {
       this.postsByTag = await this.$fetchPostsByTag({}, params)
+      console.log(this.postsByTag)
 
       // this.postsByTag = [
       //   { id: 'ID' , name: 'タグ名', posts: [

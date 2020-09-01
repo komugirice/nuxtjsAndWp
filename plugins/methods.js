@@ -7,12 +7,12 @@ Vue.prototype.$fetchPostsByCategories = async (params, params2) => {
   )
   const posts = response.data
 
-  console.log('params2=' + params2)
+  // console.log('params2=' + params2)
   const categoryResponse = await axios.get(
     process.env.WORDPRESS_REST_API_ENDPOINT + '/categories', params2
   )
   const categories = categoryResponse.data
-  console.log(categories)
+  // console.log(categories)
 
   const postsByCategories = []
 
@@ -75,35 +75,31 @@ Vue.prototype.$fetchPostsByTag = async (params, params2) => {
     process.env.WORDPRESS_REST_API_ENDPOINT + '/tags',
     params2
   )
-  const tags = tagResponse.data
+  const tag = tagResponse.data[0]
 
-  const postsByTag = {}
+  let postsByTag = {}
 
   for (let i = 0; i < posts.length; i++) {
     const post = posts[i]
     for (let n = 0; n < post.tags.length; n++) {
       const tagId = post.tags[n]
-      for (let y = 0; y < tags.length; y++) {
-        const tag = tags[y]
-        // console.log('y=' + y)
+      // console.log('y=' + y)
 
-        if (tagId === tag.id) {
-          console.log('postsByTag.posts=' + postsByTag.posts)
-          if (postsByTag.posts === undefined) {
-            postsByTag.push(
-              {
-                id: tag.id,
-                name: tag.name,
-                posts: [post]
-              }
-            )
-          } else {
-            postsByTag.posts.push(post)
-          }
+      if (tagId === tag.id) {
+        // console.log('postsByTag.posts=' + postsByTag.posts)
+        if (postsByTag.posts === undefined) {
+          postsByTag =
+            {
+              id: tag.id,
+              name: tag.name,
+              posts: [post]
+            }
+        } else {
+          postsByTag.posts.push(post)
         }
       }
     }
   }
-  // console.log(postsByCategories)
+  console.log(postsByTag)
   return postsByTag
 }

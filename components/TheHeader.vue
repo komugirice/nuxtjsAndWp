@@ -4,7 +4,7 @@
       <header id="header" class="header cf" itemscope="" itemtype="https://schema.org/WPHeader">
         <div id="header-in" class="header-in wrap cf" itemscope="" itemtype="https://schema.org/WebSite">
           <h1 class="logo logo-header logo-text">
-            <a :href="'https://www.komugirice.com/' | postLink" class="site-name site-name-text-link" itemprop="url"><span class="site-name-text" itemprop="name about">KomugiriceのBlog</span></a>
+            <a :href="'/'" class="site-name site-name-text-link" itemprop="url"><span class="site-name-text" itemprop="name about">KomugiriceのBlog</span></a>
           </h1>
           <div class="tagline" itemprop="alternativeHeadline">
             Android等のプログラミングや趣味のブログです
