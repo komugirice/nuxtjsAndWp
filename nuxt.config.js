@@ -88,12 +88,20 @@ export default {
     routes () {
       return Promise.all([
         axios.get(`${WORDPRESS_REST_API_ENDPOINT}/posts?per_page=100&page=1&_embed=1`),
+        axios.get(`${WORDPRESS_REST_API_ENDPOINT}/categories`),
+        axios.get(`${WORDPRESS_REST_API_ENDPOINT}/tags`),
       ]).then((data) => {
         const posts = data[0]
+        const categories = data[1]
+        const tags = data[2]
         return posts.data.map((post) => {
           const link = post.link.replace(WORDPRESS_BASE_URL + '/', '')
           return { route: `${link}`, payload: post }
-        })
+        }).concat(categories.data.map((category) => {
+          return { route: `category/${category.slug}/`, payload: category }
+        })).concat(tags.data.map((tag) => {
+          return { route: `tag/${tag.slug}/`, payload: tag }
+        }))
       })
     }
   },

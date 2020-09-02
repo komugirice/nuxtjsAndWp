@@ -1,1 +1,0 @@
-__NUXT_JSONP__("qiitaapplication/495", {data:[{}],fetch:[],mutations:void 0});

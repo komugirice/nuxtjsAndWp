@@ -9,7 +9,8 @@ Vue.filter('formatDate', (date) => {
 
 Vue.filter('postLink', (post) => {
   const linkName = post.link.replace(
-    process.env.WORDPRESS_BASE_URL + '/',
+    // process.env.WORDPRESS_BASE_URL + '/',
+    process.env.WORDPRESS_BASE_URL,
     ''
   )
   const link = `${linkName}`
