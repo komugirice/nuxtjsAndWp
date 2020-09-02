@@ -7,7 +7,7 @@ Vue.prototype.$fetchPostsByCategories = async (params, params2) => {
   )
   const posts = response.data
 
-  // console.log('params2=' + params2)
+  console.log('params2=' + params2)
   const categoryResponse = await axios.get(
     process.env.WORDPRESS_REST_API_ENDPOINT + '/categories', params2
   )
