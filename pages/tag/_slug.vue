@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="list ect-entry-card ecb-entry-border front-page-type-tag">
-      <ul v-for="tag in postsByTag" :key="tag.id" class="list">
+      <ul class="list">
         <h1 class="list-title">
-          <span class="list-title-in">{{tag.name}}</span>
+          <span class="list-title-in">{{postsByTag.name}}</span>
         </h1>
-        <li v-for="post in tag.posts" :key="post.id">
+        <li v-for="post in postsByTag.posts" :key="post.id">
           <a :href="post | postLink" class="entry-card-wrap a-wrap border-element cf" :title="post.title.rendered">
             <article class="entry-card e-card cf post type-post status-publish format-standard hentry">
 
@@ -38,6 +38,7 @@ export default {
   },
   methods: {
     async fetchData (params) {
+      // console.log(params)
       this.postsByTag = await this.$fetchPostsByTag({}, params)
       console.log(this.postsByTag)
 
