@@ -4,9 +4,11 @@
       <div class="footer-bottom fdt-up-and-down fnm-text-width cf">
         <div class="footer-bottom-content">
           <nav id="navi-footer" class="navi-footer">
-            <div id="navi-footer-in" class="navi-footer-in"></div>
+            <div id="navi-footer-in" class="navi-footer-in" />
           </nav>
-          <div class="source-org copyright">Copyright © 2020 komugiriceのBlog All Rights Reserved.</div>
+          <div class="source-org copyright">
+            Copyright © 2020 komugiriceのBlog All Rights Reserved.
+          </div>
         </div>
       </div>
     </div>

@@ -1,28 +1,32 @@
 <template>
   <div id="sidebar" class="sidebar nwa cf" role="complementary">
     <aside id="categories" class="widget widget-sidebar widget_categories">
-      <h3 class="widget-sidebar-title widget-title">カテゴリー</h3>
+      <h3 class="widget-sidebar-title widget-title">
+        カテゴリー
+      </h3>
       <ul>
         <li v-for="category in postsByCategories" :key="category.id" class="cat-item">
-          <a :href="category | postLink" class="cf">{{category.name}}
-            <span class="post-count">{{category.posts.length}}</span>
+          <a :href="category | postLink" class="cf">{{ category.name }}
+            <span class="post-count">{{ category.posts.length }}</span>
           </a>
         </li>
       </ul>
     </aside>
-      <aside id="tag_cloud" class="widget widget-sidebar widgert_tag_cloud">
-        <h3 class="widget-sidebar-title widget-title">タグ</h3>
-        <ul class="tagcloud">
-          <li v-for="tag in tags" :key="tag.id" class="tag-item">
-            <a :href="tag | postLink" class="tag-cloud-link">
-              <span class="tag-caption">
-                <span class="fa fa-tag" aria-hidden="true"></span>
-                {{tag.name}}
-              </span>
-              <span class="tag-link-count">{{tag.count}}</span>
-            </a>
-          </li>
-        </ul>
+    <aside id="tag_cloud" class="widget widget-sidebar widgert_tag_cloud">
+      <h3 class="widget-sidebar-title widget-title">
+        タグ
+      </h3>
+      <ul class="tagcloud">
+        <li v-for="tag in tags" :key="tag.id" class="tag-item">
+          <a :href="tag | postLink" class="tag-cloud-link">
+            <span class="tag-caption">
+              <span class="fa fa-tag" aria-hidden="true" />
+              {{ tag.name }}
+            </span>
+            <span class="tag-link-count">{{ tag.count }}</span>
+          </a>
+        </li>
+      </ul>
     </aside>
   </div>
 </template>

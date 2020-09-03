@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="list ect-entry-card ecb-entry-border front-page-type-tag">
-      <ul class="list">
+      <ul v-if="postsByTag.posts" class="list">
         <h1 class="list-title">
-          <span class="list-title-in">{{postsByTag.name}}</span>
+          <span class="list-title-in">{{ postsByTag.name }}</span>
         </h1>
         <li v-for="post in postsByTag.posts" :key="post.id">
           <a :href="post | postLink" class="entry-card-wrap a-wrap border-element cf" :title="post.title.rendered">
             <article class="entry-card e-card cf post type-post status-publish format-standard hentry">
 
               <div class="entry-card-content card-content e-card-content">
-                <h2 class="entry-card-title card-title e-card-title" itemprop="headline">{{post.title.rendered}}</h2>
+                <h2 class="entry-card-title card-title e-card-title" itemprop="headline">{{ post.title.rendered }}</h2>
                 <div class="entry-card-meta card-meta e-card-meta">
-                  <div class="entry-card-info e-card-info"></div>
-                    <div class="entry-card-tags"><span class="modified-date">{{post.modified | formatDate}}</span></div>
+                  <div class="entry-card-info e-card-info" />
+                  <div class="entry-card-tags"><span class="modified-date">{{ post.modified | formatDate }}</span></div>
                 </div>
               </div><!-- /.entry-card-content -->
             </article>

@@ -4,13 +4,13 @@ require('dotenv').config()
 
 const {
   WORDPRESS_BASE_URL,
-  WORDPRESS_REST_API_ENDPOINT,
+  WORDPRESS_REST_API_ENDPOINT
 } = process.env
 
 export default {
   env: {
     WORDPRESS_BASE_URL,
-    WORDPRESS_REST_API_ENDPOINT,
+    WORDPRESS_REST_API_ENDPOINT
   },
   /*
   ** Nuxt rendering mode
@@ -35,7 +35,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: "stylesheet", href:"https://use.fontawesome.com/releases/v5.6.1/css/all.css"}
+      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.6.1/css/all.css' }
     ],
     bodyAttrs: {
       class: 'fz-18px fw-400'
@@ -89,7 +89,7 @@ export default {
       return Promise.all([
         axios.get(`${WORDPRESS_REST_API_ENDPOINT}/posts?per_page=100&page=1&_embed=1`),
         axios.get(`${WORDPRESS_REST_API_ENDPOINT}/categories`),
-        axios.get(`${WORDPRESS_REST_API_ENDPOINT}/tags`),
+        axios.get(`${WORDPRESS_REST_API_ENDPOINT}/tags`)
       ]).then((data) => {
         const posts = data[0]
         const categories = data[1]

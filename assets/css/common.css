@@ -150,5 +150,19 @@ h5{ font-size: 15px; font-size: 1.5rem; }
 .bg_blk3{ background-color: #212121; }
 .bg_blk4{ background-color: #121212; }
 
+/* ----------------------------------------------------------
+	追加
+---------------------------------------------------------- */
+.indent {
+    margin-left: 1em !important;
+}
 
+.filename {
+    font-size: 18px;
+    font-weight: bold;
+}
 
+.caption {
+    font-size: 20px;
+    font-weight: bold;
+}
